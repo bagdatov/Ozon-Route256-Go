@@ -1,0 +1,24 @@
+app:
+  name: "service-storage"
+  version: "0.1.0"
+  host: "localhost:8002"
+
+postgres:
+  pool: 5
+  host: "localhost"
+  port: "5434"
+  db_name: "postgres"
+  username: "postgres"
+  password: "postgres"
+
+kafka:
+  brokers: ["localhost:9095"]
+  group_id: "storage"
+  income_topic: "incoming"
+  reset_topic: "reset"
+  reservation_topic: "reservation"
+
+redis:
+  address: "localhost:6379"
+  db: 0
+  ttl: 15m

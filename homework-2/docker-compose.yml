@@ -1,0 +1,35 @@
+version: '3'
+services:
+
+  game-master:
+    build:
+      context: .
+      dockerfile: ./cmd/game-master/Dockerfile
+    ports:
+      - '8080:8080'
+      - '8000:8000'
+    depends_on:
+      - postgres
+    restart: unless-stopped
+
+  telegram-bot:
+    build:
+      context: .
+      dockerfile: ./cmd/telegram-bot/Dockerfile
+    ports:
+      - '8443:8443'
+    depends_on:
+      - game-master
+    restart: unless-stopped
+
+  postgres:
+    container_name: postgres
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+      POSTGRES_HOST: postgres
+    ports:
+      - '5432:5432'
+    restart: unless-stopped

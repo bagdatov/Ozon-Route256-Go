@@ -1,0 +1,4 @@
+test:
+  image: golang:1.17
+  script:
+    - make test

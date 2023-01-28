@@ -1,0 +1,477 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "api.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "Chgk"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/api/v1/answer": {
+      "get": {
+        "operationId": "Chgk_ReadAnswer",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiAnswer"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "QuestionID",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "Chgk"
+        ]
+      }
+    },
+    "/api/v1/begin": {
+      "post": {
+        "operationId": "Chgk_Begin",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiGameResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "Tournament",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "ChatID",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "Chgk"
+        ]
+      }
+    },
+    "/api/v1/health/check": {
+      "get": {
+        "operationId": "Chgk_HealthCheck",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiPong"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "ChatID",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "Username",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Chgk"
+        ]
+      }
+    },
+    "/api/v1/question": {
+      "get": {
+        "operationId": "Chgk_ReadQuestion",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiQuestion"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "QuestionID",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "Chgk"
+        ]
+      }
+    },
+    "/api/v1/random": {
+      "get": {
+        "operationId": "Chgk_RandomTournaments",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiRandomResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Chgk"
+        ]
+      }
+    },
+    "/api/v1/score": {
+      "get": {
+        "operationId": "Chgk_ReadScore",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiScore"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "ChatID",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "Chgk"
+        ]
+      }
+    },
+    "/api/v1/stop": {
+      "post": {
+        "operationId": "Chgk_Finish",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiStopResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "ChatID",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "Chgk"
+        ]
+      }
+    },
+    "/api/v1/submit": {
+      "post": {
+        "operationId": "Chgk_Submit",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiGuessResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "ChatID",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "Username",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "QuestionID",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "Answer",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Chgk"
+        ]
+      }
+    },
+    "/api/v1/tournament": {
+      "get": {
+        "operationId": "Chgk_ReadTournament",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiTournament"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "Name",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Chgk"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "apiAnswer": {
+      "type": "object",
+      "properties": {
+        "Text": {
+          "type": "string"
+        },
+        "Num": {
+          "type": "string",
+          "format": "int64"
+        },
+        "Comment": {
+          "type": "string"
+        },
+        "Source": {
+          "type": "string"
+        },
+        "Author": {
+          "type": "string"
+        }
+      }
+    },
+    "apiGameResponse": {
+      "type": "object",
+      "properties": {
+        "QuestionIDs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "int64"
+          }
+        }
+      }
+    },
+    "apiGuessResponse": {
+      "type": "object",
+      "properties": {
+        "Correct": {
+          "type": "boolean"
+        }
+      }
+    },
+    "apiPong": {
+      "type": "object",
+      "properties": {
+        "ChatID": {
+          "type": "string",
+          "format": "int64"
+        },
+        "Data": {
+          "type": "string"
+        }
+      }
+    },
+    "apiQuestion": {
+      "type": "object",
+      "properties": {
+        "Num": {
+          "type": "string",
+          "format": "int64"
+        },
+        "Text": {
+          "type": "string"
+        }
+      }
+    },
+    "apiRandomResponse": {
+      "type": "object",
+      "properties": {
+        "Tournaments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/apiTournament"
+          }
+        }
+      }
+    },
+    "apiScore": {
+      "type": "object",
+      "properties": {
+        "Users": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/apiUser"
+          }
+        }
+      }
+    },
+    "apiStopResponse": {
+      "type": "object"
+    },
+    "apiTournament": {
+      "type": "object",
+      "properties": {
+        "ID": {
+          "type": "string",
+          "format": "int64"
+        },
+        "Key": {
+          "type": "string"
+        },
+        "Name": {
+          "type": "string"
+        },
+        "Date": {
+          "type": "string"
+        },
+        "ToursNum": {
+          "type": "string",
+          "format": "int64"
+        },
+        "QuestionNum": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "apiUser": {
+      "type": "object",
+      "properties": {
+        "Name": {
+          "type": "string"
+        },
+        "Score": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    }
+  }
+}

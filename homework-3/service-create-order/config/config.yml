@@ -1,0 +1,17 @@
+app:
+  name: "service-create-order"
+  version: "0.1.0"
+  host: "localhost:8000"
+
+postgres:
+  pool: 5
+  host: "localhost"
+  port: "5432"
+  db_name: "postgres"
+  username: "postgres"
+  password: "postgres"
+
+kafka:
+  brokers: ["localhost:9095"]
+  income_topic: "incoming"
+  reset_topic: "reset"

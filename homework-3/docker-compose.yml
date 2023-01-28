@@ -1,0 +1,200 @@
+version: '3.9'
+services:
+
+  service-create-order:
+    build:
+      context: .
+      dockerfile: ./service-create-order/Dockerfile
+    environment:
+      APP-HOST: 'service-create-order:8000'
+      PG-HOST: postgres-create-order
+      PG-PORT: 5432
+      KAFKA-BROKERS: 'kafka-1:9094'
+    ports:
+      - '8000:8000'
+    depends_on:
+      - postgres-create-order
+      - kafka-1
+    restart: unless-stopped
+    networks:
+      mynetwork:
+        ipv4_address: 172.20.0.10 
+
+  service-monitoring-order:
+    build:
+      context: .
+      dockerfile: ./service-monitoring-order/Dockerfile
+    environment:
+      APP-HOST: 'service-monitoring-order:8001'
+      PG-HOST: postgres-monitoring-order
+      PG-PORT: 5432
+      KAFKA-BROKERS: 'kafka-1:9094'
+    ports:
+      - '8001:8001'
+    depends_on:
+      - postgres-monitoring-order
+      - kafka-1
+    restart: unless-stopped
+    networks:
+      mynetwork:
+        ipv4_address: 172.20.0.2
+
+  service-store:
+    build:
+      context: .
+      dockerfile: ./service-store/Dockerfile
+    environment:
+      APP-HOST: 'service-store:8002'
+      PG-HOST: postgres-store
+      PG-PORT: 5432
+      KAFKA-BROKERS: 'kafka-1:9094'
+      REDIS-ADDR: 'redis:6379'
+    ports:
+      - '8002:8002'
+    depends_on:
+      - postgres-store
+      - kafka-1
+      - redis
+    restart: unless-stopped
+    networks:
+      mynetwork:
+        ipv4_address: 172.20.0.3
+
+  postgres-create-order:
+    container_name: postgres-create-order
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+      POSTGRES_HOST: postgres
+    ports:
+      - '5432:5432'
+    restart: unless-stopped
+    networks:
+      mynetwork:
+        ipv4_address: 172.20.0.4
+
+  shard1:
+    container_name: shard1
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+      POSTGRES_HOST: postgres
+    ports:
+      - '5442:5432'
+    volumes:
+      - ./partitioning/shard1.sql:/docker-entrypoint-initdb.d/shard1.sql
+    restart: unless-stopped
+    networks:
+      mynetwork:
+        ipv4_address: 172.20.0.6
+
+  shard2:
+    container_name: shard2
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+      POSTGRES_HOST: postgres
+    ports:
+      - '5443:5432'
+    volumes:
+      - ./partitioning/shard2.sql:/docker-entrypoint-initdb.d/shard2.sql
+    restart: unless-stopped
+    networks:
+      mynetwork:
+        ipv4_address: 172.20.0.7
+
+  postgres-monitoring-order:
+    container_name: postgres-monitoring-order
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+      POSTGRES_HOST: postgres
+    ports:
+        - '5433:5432'
+    restart: unless-stopped
+    networks:
+      mynetwork:
+        ipv4_address: 172.20.0.8
+
+  postgres-store:
+    container_name: postgres-store
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+      POSTGRES_HOST: postgres
+    ports:
+      - '5434:5432'
+    restart: unless-stopped
+    networks:
+      mynetwork:
+        ipv4_address: 172.20.0.5
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    ports:
+      - '8080:8080'
+    environment:
+      - KAFKA_CLUSTERS_0_NAME=local
+      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka-1:9092,kafka-2:9092,kafka-3:9092
+      - KAFKA_CLUSTERS_0_ZOOKEEPER=zookeeper:2181
+    networks:
+      mynetwork:
+        ipv4_address: 172.20.0.11
+
+  zookeeper:
+    image: zookeeper
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+    networks:
+      mynetwork:
+        ipv4_address: 172.20.0.12
+
+  kafka-1:
+    image: wurstmeister/kafka
+    ports:
+      - "9095:9094"
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_LISTENERS: INTERNAL://kafka-1:9092,OUTSIDE://kafka-1:9094
+      # Uncomment below if services are run locally (not in docker)
+      # KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka-1:9092,OUTSIDE://localhost:9095
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka-1:9092,OUTSIDE://kafka-1:9094
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_CREATE_TOPICS: "incoming:1:1,reset:1:1,reservation:1:1:compact"
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      mynetwork:
+        ipv4_address: 172.20.0.13
+
+  redis:
+    image: redis
+    ports:
+      - '6379:6379'
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_AOF_ENABLED=no
+    networks:
+      mynetwork:
+        ipv4_address: 172.20.0.14
+    restart: unless-stopped
+
+networks:
+  mynetwork:
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24

@@ -1,0 +1,163 @@
+syntax = "proto3";
+
+option go_package = "./pb";
+
+import "google/api/annotations.proto";
+
+package api;
+
+service Chgk {
+  rpc HealthCheck(Ping) returns (Pong) {
+    option (google.api.http) = {
+      get: "/api/v1/health/check"
+    };
+  }
+
+  rpc ReadTournament(TournamentRequest) returns (Tournament) {
+    option (google.api.http) = {
+      get: "/api/v1/tournament"
+    };
+  }
+
+  rpc ReadQuestion(QuestionRequest) returns (Question) {
+    option (google.api.http) = {
+      get: "/api/v1/question"
+    };
+  }
+
+  rpc ReadAnswer(AnswerRequest) returns (Answer) {
+    option (google.api.http) = {
+      get: "/api/v1/answer"
+    };
+  }
+
+  rpc ReadScore(ScoreRequest) returns (Score) {
+    option (google.api.http) = {
+      get: "/api/v1/score"
+    };
+  }
+
+  rpc RandomTournaments(RandomRequest) returns (RandomResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/random"
+    };
+  }
+
+  rpc Begin(GameRequest) returns (GameResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/begin"
+      body: "*"
+    };
+  }
+
+  rpc Submit(Guess) returns (GuessResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/submit"
+      body: "*"
+    };
+  }
+
+  rpc Finish(StopRequest) returns (StopResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/stop"
+      body: "*"
+    };
+  }
+
+}
+
+
+message Ping {
+  int64 ChatID = 1;
+  string Username = 2;
+}
+
+message Pong {
+  int64 ChatID = 1;
+  string Data = 2;
+}
+
+message TournamentRequest {
+  string Name = 1;
+}
+
+message Tournament {
+  int64 ID = 1;
+  string Key = 2;
+  string Name = 3;
+  string Date = 4;
+  int64 ToursNum = 5;
+  int64 QuestionNum = 6;
+}
+
+message QuestionRequest {
+  int64 QuestionID = 1;
+}
+
+message Question {
+  int64  Num = 1;
+  string Text = 2;
+}
+
+message AnswerRequest {
+  int64 QuestionID = 1;
+}
+
+message Answer {
+  string Text = 1;
+  int64 Num = 2;
+  string Comment = 3;
+  string Source = 4;
+  string Author = 5;
+}
+
+message Guess {
+  int64 ChatID = 1;
+  string Username = 2;
+  int64 QuestionID = 3;
+  string Answer = 4;
+
+}
+
+message GuessResponse {
+  bool Correct = 1;
+}
+
+message GameRequest {
+  string Tournament = 1;
+  int64 ChatID = 2;
+}
+
+message GameResponse {
+  repeated int64 QuestionIDs = 1;
+}
+
+message ScoreRequest {
+  int64 ChatID = 1;
+}
+
+message Score {
+  repeated User Users = 1;
+}
+
+message User {
+  string Name = 1;
+  int64 Score = 2;
+}
+
+
+message StopRequest {
+  int64 ChatID = 1;
+}
+
+message StopResponse {
+}
+
+
+message RandomRequest {
+}
+
+message RandomResponse {
+  repeated Tournament Tournaments = 1;
+}
+

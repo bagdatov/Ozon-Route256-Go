@@ -1,0 +1,24 @@
+app:
+  name: "game-master"
+  version: "0.1.0"
+
+grpc:
+  host: "game-master:8080"
+
+gateway:
+  port: "8000"
+
+logger:
+  log_level: "debug"
+
+postgres:
+  pool: 5
+  host: "postgres"
+  port: "5432"
+  db_name: "postgres"
+  username: "postgres"
+  password: "postgres"
+
+chgk_base:
+  url: "https://db.chgk.info/"
+  timeout: "10s"

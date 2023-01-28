@@ -1,0 +1,12 @@
+app:
+  name: "telegram-bot"
+  version: "0.1.0"
+
+grpc:
+  host: "game-master:8080"
+
+logger:
+  log_level: "debug"
+
+telegram:
+  key: ""
