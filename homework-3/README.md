@@ -22,7 +22,6 @@
 
 ### Ссылка просто посмотреть на доску: https://miro.com/app/board/uXjVOxSlqWs=/?share_link_id=853568345782
 
-### Ссылка на редактирование доски: https://miro.com/welcomeonboard/QXpOVkpteEpwSmxhdmI3Q3NpYXB3WE9jTEZ0R2ZtNEFRbWJ5Qmg2Y3pnUEREMGoxYnpNSFYyOXF1ZERJVGI3V3wzNDU4NzY0NTI2Mzc0MTAwMjcw?share_link_id=173071933586
 
 
 -----
